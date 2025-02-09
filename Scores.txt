@@ -1,0 +1,4 @@
+{
+    "Computer Score": 0,
+    "Human Score": 0
+}

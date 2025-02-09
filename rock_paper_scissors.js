@@ -9,6 +9,7 @@ const humanScoreText = document.getElementById("humanScoreText");
 const computerScoreText = document.getElementById("computerScoreText");
 const resultText = document.getElementById("results")
 
+
 function getComputerChoice() {
     const randomIndex = Math.floor(Math.random() * rockPaperScissors.length);
     return rockPaperScissors[randomIndex];
@@ -93,3 +94,35 @@ scissorBtn.onclick = function () {
 };
 
 
+// Function to fetch scores from the API
+async function fetchScores() {
+    const response = await fetch('http://127.0.0.1:5000/api/scores');
+    const parsedData = await response.json(); // No need for JSON.parse() here
+    humanScoreText.innerHTML = "Human Score: " + parsedData["Human Score"];
+    computerScoreText.innerHTML = "Computer Score: " + parsedData["Computer Score"];
+    humanScore = parsedData["Human Score"]
+    computerScore = parsedData["Computer Score"]
+}
+
+
+document.getElementById('loadScoreBtn').addEventListener('click', fetchScores);
+
+
+
+// Function to send scores to API
+async function saveScores() {
+    const newScores = {
+        "Computer Score": computerScore,
+        "Human Score": humanScore,
+    };
+
+    await fetch('http://127.0.0.1:5000/api/scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newScores),
+    });
+}
+
+document.getElementById('saveScoreBtn').addEventListener('click', saveScores);
